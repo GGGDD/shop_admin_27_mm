@@ -8,6 +8,9 @@ import router from './router'
 // 导入 ElementUI
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+// 导入CSS样式
+import '@/assets/css/index.css'
+
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
