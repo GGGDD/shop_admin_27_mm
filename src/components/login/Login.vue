@@ -72,7 +72,9 @@ export default {
           .then(res => {
             // console.log('登录结果：', res)
             if (res.data.meta.status === 200) {
-              // 登录成功，跳转到后台首页
+              // 1 登录成功，跳转到后台首页
+              // 2 将 token 存储到localStorage中
+              localStorage.setItem('token', res.data.data.token)
               // 通过编程式导航实现路由跳转
               // push 方法的参数为：要跳转到的页面路径，与 路由规则 中的path匹配
               this.$router.push('/home')
