@@ -18,7 +18,7 @@
       <!-- <p ref="p1">这是一个P</p> -->
     </el-form-item>
     <el-form-item label="密码" prop="password">
-      <el-input v-model="loginForm.password"></el-input>
+      <el-input type="password" v-model="loginForm.password"></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
@@ -28,13 +28,16 @@
 </template>
 
 <script>
+// 导入 axios
+import axios from 'axios'
+
 export default {
   data () {
     return {
       // 登录表单数据
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: '123456'
       },
       // 用户名和密码的校验规则
       rules: {
@@ -44,7 +47,7 @@ export default {
           // message  表单校验失败时，展示的提示信息
           // min 和 max 配合用来限制表单内容的长度
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 6, max: 12, message: '用户名长度为6到12个字符', trigger: 'blur' }
+          { min: 3, max: 12, message: '用户名长度为3到12个字符', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '密码为必填项', trigger: 'blur' },
@@ -56,28 +59,37 @@ export default {
   methods: {
     // 登录事件：
     submitForm (formName) {
-      // $refs 在 Vue 中用来直接获取组件或DOM对象
-      // $refs 表示页面中所有 ref 的集合，是一个对象，通过 $refs 对象中的属性，可以直接
-      // 拿到页面中的组件或DOM对象
-      // console.log(this.$refs, this.$refs.p1.innerText)
-
-      // this.$refs[formName].validate((valid) => {
-      // this.$refs.ruleForm 就是 el-form 表单组件
       // validate 方法用来实现表单校验
       this.$refs.ruleForm.validate((valid) => {
-        // if (valid) {
-        //   alert('表单校验成功：submit!')
-        // } else {
-        //   console.log('表单校验失败：error submit!!')
-        //   return false
-        // }
-
         if (!valid) {
           return false
         }
 
         // 校验成功
         // 发送请求到登录接口，完成登录
+        axios
+          .post('http://localhost:8888/api/private/v1/login', this.loginForm)
+          .then(res => {
+            // console.log('登录结果：', res)
+            if (res.data.meta.status === 200) {
+              // 登录成功，跳转到后台首页
+              // 通过编程式导航实现路由跳转
+              // push 方法的参数为：要跳转到的页面路径，与 路由规则 中的path匹配
+              this.$router.push('/home')
+              this.$message({
+                message: res.data.meta.msg,
+                type: 'success',
+                duration: 800
+              })
+            } else {
+              // 登录失败
+              this.$message({
+                message: res.data.meta.msg,
+                type: 'error',
+                duration: 1000
+              })
+            }
+          })
       })
     },
     // 表单重置：
