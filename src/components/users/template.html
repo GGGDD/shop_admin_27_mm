@@ -8,7 +8,7 @@
 
   <!-- 搜索 -->
     <el-row :gutter="20">
-      <el-col :span="13">
+      <el-col :span="8">
           <el-input placeholder="请输入内容" v-model="info" class="users-input"></el-select>
             <el-button slot="append" icon="el-icon-search" @click='searchItem'></el-button>
           </el-input>
@@ -79,4 +79,28 @@
     class="users-page"
     >
   </el-pagination>
+
+  <!-- 添加弹窗 -->
+  <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+    <el-form :model="useForm">
+      <el-form-item label="用户名" :label-width="formLabelWidth">
+        <el-input v-model="useForm.name" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="密码" :label-width="formLabelWidth">
+        <el-input v-model="useForm.name" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱" :label-width="formLabelWidth">
+        <el-input v-model="useForm.name" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="手机" :label-width="formLabelWidth">
+        <el-input v-model="useForm.name" autocomplete="off"></el-input>
+      </el-form-item>
+    </el-form>
+
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+    </div>
+  </el-dialog>
+
 </div>

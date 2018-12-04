@@ -13,10 +13,25 @@ export default {
       // 每页显示几条数据
       pageSize: 3,
       // input 关联的数据
-      info: ''
+      info: '',
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      formLabelWidth: '80px',
+      useForm: {
+        name: '',
+        password: '',
+        email: '',
+        phone: ''
+
+      }
     }
   },
   methods: {
+    // 添加用户
+    addItem () {
+      // this.dialogTableVisible = true
+      this.dialogFormVisible = true
+    },
 
     // 删除按钮
     delItem (scope) {
@@ -83,13 +98,8 @@ export default {
           // 查询
           query
         }
-        // get方式请求头
-        // headers: {
-        //   Authorization: localStorage.getItem('token')
-        // }
-      }
 
-      // const res = await axios.get('http://localhost:8888/api/private/v1/users', config)
+      }
 
       const res = await this.$http.get('users', config)
       // es6解构
@@ -103,7 +113,6 @@ export default {
         this.userData = users
         // 重新渲染页码
         this.pagenum = cuePage
-        console.log(res)
       } else {
         // 没有登陆成功 , 就清除 token , 然后 , 跳转到 登陆页面进行 跳转
         localStorage.removeItem('token')
