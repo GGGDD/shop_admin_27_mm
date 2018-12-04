@@ -68,13 +68,10 @@ export default {
   },
   methods: {
     // 登录事件：
-    submitForm (formName) {
+    async submitForm (formName) {
       // validate 方法用来实现表单校验
-      this.$refs.ruleForm.validate((valid) => {
-        if (!valid) {
-          return false
-        }
-
+      try {
+        await this.$refs.ruleForm.validate()
         // 校验成功
         // 发送请求到登录接口，完成登录
         axios
@@ -102,7 +99,9 @@ export default {
               })
             }
           })
-      })
+      } catch (e) {
+        console.log('失败')
+      }
     },
     // 表单重置：
     resetForm (formName) {
