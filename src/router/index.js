@@ -6,6 +6,8 @@ import Router from 'vue-router'
 // 导入自定义组件
 import Home from '@/components/home/Home'
 import Login from '@/components/login/Login'
+import Users from '@/components/users/Users'
+import Roles from '@/components/roles/Roles'
 
 // 安装路由插件
 Vue.use(Router)
@@ -13,7 +15,15 @@ Vue.use(Router)
 // 2 创建路由实例
 const router = new Router({
   routes: [
-    { path: '/home', component: Home },
+    {path: '/', redirect: '/home'},
+    { path: '/home',
+      component: Home,
+      children: [
+
+        {path: '/users', component: Users},
+        {path: '/roles', component: Roles}
+      ]
+    },
     { path: '/login', component: Login }
   ]
 })

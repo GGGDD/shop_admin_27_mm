@@ -1,0 +1,82 @@
+<div class="users">
+  <!-- 导航 -->
+  <el-breadcrumb separator-class="el-icon-arrow-right" class="users-nav">
+    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+    <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+    <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+  </el-breadcrumb>
+
+  <!-- 搜索 -->
+    <el-row :gutter="20">
+      <el-col :span="13">
+          <el-input placeholder="请输入内容" v-model="info" class="users-input"></el-select>
+            <el-button slot="append" icon="el-icon-search" @click='searchItem'></el-button>
+          </el-input>
+      </el-col>
+      <el-col :span="5">
+          <el-button type="success" round @click='addItem'>添加用户</el-button>
+      </el-col>
+    </el-row>
+
+  <!-- 列表 -->
+    <el-table
+    class="users-table"
+    :data="userData"
+    stripe
+    style="width: 100%">
+    <el-table-column
+      prop="username"
+      label="姓名"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="email"
+      label="邮箱"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="create_time"
+      label="电话">
+    </el-table-column>
+    <el-table-column
+      label="用户状态">
+      <!-- 放入自定义列 , 自定义列中放入 switch开关 -->
+      <!-- 自定义列中 , 不需要prop属性 -->
+      <template slot-scope="scope">
+        <el-switch
+          v-model="scope.row.mg_state"
+          @change='switchChange(scope.row)'
+         >
+        </el-switch>
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      prop="mg_state"
+      label="操作">
+      <template slot-scope="scope">
+        <!-- 修改按钮 -->
+          <el-button size="small" type="primary" icon="el-icon-edit" circle></el-button>
+          <!-- 删除按钮 -->
+          <el-button size="small" type="danger" icon="el-icon-delete" circle @click='delItem(scope.row)'></el-button>
+          <el-button size="small" type="success" round icon="el-icon-check">成功按钮</el-button>
+        </el-switch>
+      </template>
+    </el-table-column>
+
+  </el-table>
+
+  <!-- 分页 -->
+  <!-- current-page 当前页 展示第几页数据 -->
+  <!-- page-size 每页显示个数 -->
+  <el-pagination
+    background
+    layout="prev, pager, next"
+    :total="total"
+    :page-size='pageSize'
+    :current-page='pagenum'
+    @current-change='currChange'
+    class="users-page"
+    >
+  </el-pagination>
+</div>
