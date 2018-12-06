@@ -46,11 +46,11 @@
 
               <el-menu-item index="/roles">
                 <i class="el-icon-menu"></i>
-                选项1
+                角色管理
               </el-menu-item>
-              <el-menu-item index="2-2">
+              <el-menu-item index="/rights">
                 <i class="el-icon-menu"></i>
-                选项1
+                权限管理
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>

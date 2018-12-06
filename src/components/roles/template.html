@@ -1,0 +1,110 @@
+<div>
+  <!-- 面包屑导航 -->
+  <el-breadcrumb separator-class="el-icon-arrow-right" class="users-nav">
+    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+    <el-breadcrumb-item>权限管理</el-breadcrumb-item>
+    <el-breadcrumb-item>角色列表</el-breadcrumb-item>
+  </el-breadcrumb>
+
+  <!-- table -->
+   <el-table
+    :data="tableData"
+    style="width: 100%">
+
+    <!-- 折叠的内容 , 放在这里 -->
+    <el-table-column type="expand">
+      <template slot-scope="scope">
+        <!-- 0 . 先判定 有没有元素 -->
+        <span v-if="scope.row.children.length === 0">
+          <h4>暂无数据 , 请添加数据</h4>
+        </span>
+        <!-- 1 .遍历一级权限 -->
+        <el-row v-else v-for="level1 in scope.row.children" :key="level1.id" class="rolrow1">
+          <!-- 1.1 第一列 -->
+          <!-- 如果 没有给款 , 默认沾满一行 -->
+          <el-col :span='4'>
+            <el-tag
+              closable
+              type=""
+              @close="closeRolseTag(level1.id,scope.row.id)">
+              {{level1.authName}}
+            </el-tag>
+            <i class="el-icon-arrow-right"></i>
+          </el-col>
+          <!-- 2 .渲染第二列 -->
+          <el-col :span='20'>
+            <!-- 2.2  v-for 嵌套在第二列中的 行 -->
+            <el-row v-for="level2 in level1.children" :key="level2.id">
+              <el-col :span='5'>
+                <el-tag
+                  closable
+                   @close="closeRolseTag(level2,id,scope.row.id)"
+                  type="success">
+                  {{level2.authName}}
+                </el-tag>
+                <i class="el-icon-arrow-right"></i>
+              </el-col>
+              <!-- 3 . 渲染第三列 -->
+             <el-col :span='15' >
+                <span v-for="level3 in level2.children" :key="level3.id" class="rolSpan">
+                  <el-tag
+                  closable
+                   @close="closeRolseTag(level3.id,scope.row.id)"
+                  type="warning" class="mb5">
+                  {{level3.authName}}
+                </el-tag>
+              </span>
+             </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      type="index"
+      :index="getIndex">
+    </el-table-column>
+    <el-table-column
+      prop="roleName"
+      label="角色名称"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="roleDesc"
+      label="角色描述"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="address"
+      label="操作">
+      <template slot-scope="scope">
+      <!-- 修改按钮 -->
+        <el-button size="small" type="primary" icon="el-icon-edit" circle ></el-button>
+        <!-- 删除按钮 -->
+        <el-button size="small" type="danger" icon="el-icon-delete" circle ></el-button>
+        <!-- 分配角色 -->
+        <el-button size="small" type="success" round icon="el-icon-check" @click='showDialog(scope.row)'>分配权限</el-button>
+    </template>
+    </el-table-column>
+  </el-table>
+
+  <!-- 分配权限弹窗 -->
+  <el-dialog title="角色授权" :visible.sync="rolesVisible" >
+    <!-- 树 -->
+    <el-tree
+      ref='tree'
+      :data="rolesData"
+      show-checkbox
+      node-key="id"
+      :props="defaultProps"
+      :default-expand-all='true'
+      >
+    </el-tree>
+
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="rolesVisible = false">取 消</el-button>
+      <el-button type="primary" @click='allotRoles'>确 定</el-button>
+    </div>
+  </el-dialog>
+  </div>

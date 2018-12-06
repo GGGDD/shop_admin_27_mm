@@ -56,10 +56,11 @@
       label="操作">
       <template slot-scope="scope">
         <!-- 修改按钮 -->
-          <el-button size="small" type="primary" icon="el-icon-edit" circle></el-button>
+          <el-button size="small" type="primary" icon="el-icon-edit" circle @click='updateItem(scope.row)'></el-button>
           <!-- 删除按钮 -->
           <el-button size="small" type="danger" icon="el-icon-delete" circle @click='delItem(scope.row)'></el-button>
-          <el-button size="small" type="success" round icon="el-icon-check">成功按钮</el-button>
+          <!-- 分配角色 -->
+          <el-button size="small" type="success" round icon="el-icon-check" @click='roleShow(scope.row)'>分配角色</el-button>
         </el-switch>
       </template>
     </el-table-column>
@@ -81,25 +82,72 @@
   </el-pagination>
 
   <!-- 添加弹窗 -->
-  <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-    <el-form :model="useForm">
-      <el-form-item label="用户名" :label-width="formLabelWidth">
-        <el-input v-model="useForm.name" autocomplete="off"></el-input>
+  <el-dialog title="添加用户" :visible.sync="dialogFormVisible" @close='closeDialog'>
+    <el-form :model="useForm" :rules="rules" label-width="80px" ref='useForm'>
+      <el-form-item label="用户名"  prop="username">
+        <el-input v-model="useForm.username" ></el-input>
       </el-form-item>
-      <el-form-item label="密码" :label-width="formLabelWidth">
-        <el-input v-model="useForm.name" autocomplete="off"></el-input>
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="useForm.password" type='password'></el-input>
       </el-form-item>
-      <el-form-item label="邮箱" :label-width="formLabelWidth">
-        <el-input v-model="useForm.name" autocomplete="off"></el-input>
+      <el-form-item label="邮箱" prop="email">
+        <el-input v-model="useForm.email" ></el-input>
       </el-form-item>
-      <el-form-item label="手机" :label-width="formLabelWidth">
-        <el-input v-model="useForm.name" autocomplete="off"></el-input>
+      <el-form-item label="手机" prop="mobile">
+        <el-input v-model="useForm.mobile" ></el-input>
       </el-form-item>
     </el-form>
 
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      <el-button type="primary" @click="addUseItem">确 定</el-button>
+    </div>
+  </el-dialog>
+
+   <!-- 修改弹窗 -->
+   <el-dialog title="添加用户" :visible.sync="outerVisible" >
+    <el-form :model="updateForm"  label-width="80px" ref='updateForm'>
+      <el-form-item label="用户名"  prop="username">
+        <!-- <el-input v-model="updateForm.username" ></el-input> -->
+        <el-tag type="info">{{updateForm.username}}</el-tag>
+      </el-form-item>
+      <el-form-item label="邮箱" prop="email">
+        <el-input v-model="updateForm.email" ></el-input>
+      </el-form-item>
+      <el-form-item label="手机" prop="mobile">
+        <el-input v-model="updateForm.mobile" ></el-input>
+      </el-form-item>
+    </el-form>
+
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="outerVisible = false">取 消</el-button>
+      <el-button type="primary" @click="editForm">确 定</el-button>
+    </div>
+  </el-dialog>
+
+   <!-- 用户分配角色 弹窗 -->
+   <el-dialog title="分配角色" :visible.sync="roleVisible" >
+    <el-form :model="rolData"  label-width="80px" ref='rolData'>
+      <el-form-item label="用户名"  prop="username">
+        <!-- <el-input v-model="rolData.username" ></el-input> -->
+        <el-tag type="info">{{rolData.username}}</el-tag>
+      </el-form-item>
+
+      <el-form-item label="角色列表">
+        <el-select v-model="rolData.rid" placeholder="请选择">
+          <el-option
+            v-for="item in userRoleList"
+            :key="item.id"
+            :label="item.roleName"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="roleVisible = false">取 消</el-button>
+      <el-button type="primary" @click="assigmRole">确 定</el-button>
     </div>
   </el-dialog>
 
