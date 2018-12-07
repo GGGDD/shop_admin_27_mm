@@ -21,91 +21,21 @@
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
+          :unique-opened='true'
         >
-          <el-submenu index="1">
+        <!-- 一级菜单 , 使用meun的数据进行遍历 -->
+          <el-submenu  :index="menu.id+''" v-for='menu in meuns' :key='menu.id'>
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>用户管理</span>
+              <span>{{menu.authName}}</span>
             </template>
             <el-menu-item-group>
 
-              <el-menu-item index="/users">
+              <el-menu-item :index="menu2.path" v-for='menu2 in menu.children' :key='menu2.id'>
                 <i class="el-icon-menu"></i>
-                用户列表
+                {{menu2.authName}}
               </el-menu-item>
 
-            </el-menu-item-group>
-          </el-submenu>
-
-          <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>权限管理</span>
-            </template>
-            <el-menu-item-group>
-
-              <el-menu-item index="/roles">
-                <i class="el-icon-menu"></i>
-                角色管理
-              </el-menu-item>
-              <el-menu-item index="/rights">
-                <i class="el-icon-menu"></i>
-                权限管理
-              </el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
-
-          <el-submenu index="3">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>商品管理</span>
-            </template>
-            <el-menu-item-group>
-
-              <el-menu-item index="3-1">
-                <i class="el-icon-menu"></i>
-                选项1
-              </el-menu-item>
-              <el-menu-item index="3-2">
-                <i class="el-icon-menu"></i>
-                选项1
-              </el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
-
-          <el-submenu index="4">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>订单管理</span>
-            </template>
-            <el-menu-item-group>
-
-              <el-menu-item index="4-1">
-                <i class="el-icon-menu"></i>
-                选项1
-              </el-menu-item>
-              <el-menu-item index="4-2">
-                <i class="el-icon-menu"></i>
-                选项1
-              </el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
-
-          <el-submenu index="5">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>数据管理</span>
-            </template>
-            <el-menu-item-group>
-
-              <el-menu-item index="5-1">
-                <i class="el-icon-menu"></i>
-                选项1
-              </el-menu-item>
-              <el-menu-item index="5-2">
-                <i class="el-icon-menu"></i>
-                选项1
-              </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
 
@@ -122,13 +52,28 @@
 <script>
 export default {
   name: 'Home',
+  created () {
+    this.getMenu()
+  },
+  data () {
+    return {
+      // 菜单列表数据
+      meuns: []
+    }
+  },
 
   methods: {
+    // 动态获取菜单数据
+    async getMenu () {
+      const res = await this.$http.get('menus')
+      // console.log('66666', res)
+      this.meuns = res.data.data
+    },
     handleOpen (key, keyPath) {
-      console.log(key, keyPath)
+      // console.log(key, keyPath)
     },
     handleClose (key, keyPath) {
-      console.log(key, keyPath)
+      // console.log(key, keyPath)
     },
     // 退出登陆
     outLogin () {

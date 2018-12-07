@@ -11,6 +11,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 // 导入CSS样式
 import '@/assets/css/index.css'
 import axios from 'axios'
+// 引入 element-tree-grid 插件
+// import ElTreeGrid from 'element-tree-grid'
+// Vue.component(ElTreeGrid.name, ElTreeGrid) // 变成全局组件
 // 1 . 配置 公共接口地址
 axios.defaults.baseURL = 'http://localhost:8888/api/private/v1/'
 // 2 . 把axios 添加到 Vue原型中

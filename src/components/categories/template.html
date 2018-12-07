@@ -1,0 +1,94 @@
+<div>
+  <el-row>
+    <el-col>
+      <el-button type="success" plain class="button" @click='showAddCate'>添加分类</el-button>
+    </el-col>
+  </el-row>
+  <el-table
+    v-loading="isloading"
+    :data="CateData"
+    stripe
+    style="width: 100%">
+
+    <el-table-tree-column
+        tree-key="cat_id"
+        level-key="cat_level"
+        parent-key="cat_pid"
+        :index-size='20'
+        prop="cat_name"
+        label="分类名称"
+        width="180">
+    </el-table-tree-column>
+    <!-- <el-table-column
+      prop="cat_name"
+      label="分类名称"
+      width="180">
+    </el-table-column> -->
+    <el-table-column
+      prop="cat_deleted"
+      label="是否有效"
+      width="180">
+       <template slot-scope='scope'>
+        <span v-if='scope.row.cat_deleted'>true</span>
+        <span v-else>fasle</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      prop="cat_level"
+      label="排序"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      label="操作">
+      <template slot-scope='scope'>
+        <el-button size="mini" type="primary" icon="el-icon-edit" circle></el-button>
+        <el-button size="mini" type="danger" icon="el-icon-delete" circle></el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+
+  <el-pagination
+    background
+    layout="prev, pager, next"
+    :total="total"
+    :page-size='pagesize'
+    @current-change='currChange'
+    >
+</el-pagination>
+
+   <!-- 用户分配角色 弹窗 -->
+   <el-dialog title="分配角色" :visible.sync="categoryVisible" >
+      <el-form :model="categoryData"  label-width="80px" ref='categoryData'>
+        <el-form-item label="用户名"  prop="username">
+          <el-input v-model="categoryData.username" ></el-input>
+        </el-form-item>
+
+        <!-- 可选项数据源  options -->
+        <!-- 配置选项卡  props -->
+        <!-- value 值-->
+        <!-- lable 标签 -->
+
+        <!-- 为了想 拿到当前选中的值 , 使用 v-model拿到当前选中的值 = catIds -->
+        <!-- 为什么 catIds 是一个数组 , 因为 可能选中一个或者两个值 , 所以 , 储存多个值 使用数组-->
+        <!-- 动态的获取 , 可以监听 vue插件中 categories 中的 categoryData数据 , 中的catIds改变   双向数据绑定 , 选中一个数据 , 向添加一个 catIds值 -->
+
+        <!-- ???????????? catIds-->
+        <!-- ????? 为社么选中一个选项  catIds 会自动+1 ??????-->
+
+        <el-form-item label="角色列表">
+            <el-cascader
+              :options="addCateList"
+              change-on-select
+              :props='propObj'
+              v-model='categoryData.catIds'
+            ></el-cascader>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="categoryVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmDialog">确 定</el-button>
+      </div>
+    </el-dialog>
+</div>
